@@ -7,8 +7,7 @@ fn main() {
     };
 
     let tags = repo.tag_names(Some("*")).unwrap();
-
-    println!("Tags: {}", tags.len());
-
-    println!("Hello, world!");
+    for tag in tags.iter() {
+        println!("{}", tag.unwrap());
+    }
 }

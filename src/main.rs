@@ -1,3 +1,4 @@
+use dialoguer::{theme::ColorfulTheme, Select};
 use git2::Repository;
 
 fn main() {
@@ -6,8 +7,20 @@ fn main() {
         Err(e) => panic!("failed to open: {}", e),
     };
 
-    let tags = repo.tag_names(Some("*")).unwrap();
-    for tag in tags.iter() {
-        println!("{}", tag.unwrap());
-    }
+    let tags = repo
+        .tag_names(Some("*"))
+        .expect("Failed to get tag names")
+        .iter()
+        .filter_map(|t| t.map(|s| s.to_string()))
+        .collect::<Vec<String>>();
+
+    let selection = Select::with_theme(&ColorfulTheme::default())
+        .with_prompt("Select a Git tag")
+        .items(&tags)
+        .default(0)
+        .interact();
+
+    let selected_tag = tags.get(selection.unwrap()).unwrap();
+
+    println!("Selected tag: {}", selected_tag);
 }

@@ -2,10 +2,13 @@ use dialoguer::{theme::ColorfulTheme, Select};
 use git2::Repository;
 
 fn main() {
-    let repo = match Repository::open(".") {
-        Ok(repo) => repo,
-        Err(e) => panic!("failed to open: {}", e),
-    };
+    if let Err(e) = run() {
+        println!("Error: {}", e);
+    }
+}
+
+fn run() -> Result<(), Box<dyn std::error::Error>> {
+    let repo = Repository::open(".")?;
 
     let tags = repo
         .tag_names(Some("*"))
@@ -18,9 +21,14 @@ fn main() {
         .with_prompt("Select a Git tag")
         .items(&tags)
         .default(0)
-        .interact();
+        .interact()?;
 
-    let selected_tag = tags.get(selection.unwrap()).unwrap();
+    let tag_name = tags.get(selection).ok_or("Invalid selection")?;
 
-    println!("Selected tag: {}", selected_tag);
+    let tag = repo.revparse_single(tag_name)?;
+    repo.checkout_tree(&tag, None)?;
+
+    println!("Successfully checked out tag: {}", tag_name);
+
+    Ok(())
 }

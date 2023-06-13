@@ -10,9 +10,14 @@ fn main() {
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let repo = Repository::open(".")?;
 
-    let tags = repo
-        .tag_names(Some("*"))
-        .expect("Failed to get tag names")
+    let tag_names = repo.tag_names(Some("*"))?;
+
+    if tag_names.is_empty() {
+        println!("No tags found in this repository");
+        return Ok(());
+    }
+
+    let tags = tag_names
         .iter()
         .filter_map(|t| t.map(|s| s.to_string()))
         .collect::<Vec<String>>();

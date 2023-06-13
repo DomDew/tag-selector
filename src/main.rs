@@ -3,7 +3,7 @@ use git2::Repository;
 
 fn main() {
     if let Err(e) = run() {
-        println!("Error: {}", e);
+        eprintln!("Error: {}", e);
     }
 }
 
@@ -31,7 +31,11 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let tag_name = tags.get(selection).ok_or("Invalid selection")?;
 
     let tag = repo.revparse_single(tag_name)?;
-    repo.checkout_tree(&tag, None)?;
+
+    let mut builder = git2::build::CheckoutBuilder::new();
+    let checkout_opts = builder.remove_untracked(true).remove_ignored(true);
+
+    repo.checkout_tree(&tag, Some(checkout_opts))?;
 
     println!("Successfully checked out tag: {}", tag_name);
 

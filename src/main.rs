@@ -32,12 +32,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let tag = repo.revparse_single(tag_name)?;
 
-    let mut builder = CheckoutBuilder::new();
-    let checkout_opts = builder
-        .conflict_style_merge(true)
-        .notify_on(CheckoutNotificationType::CONFLICT);
-
-    repo.checkout_tree(&tag, Some(checkout_opts))?;
+    repo.set_head_detached(tag.id())?;
 
     println!("Successfully checked out tag: {}", tag_name);
 

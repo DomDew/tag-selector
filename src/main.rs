@@ -33,6 +33,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let tag = repo.revparse_single(tag_name)?;
 
     repo.set_head_detached(tag.id())?;
+    repo.checkout_head(Some(CheckoutBuilder::new().force()))?;
 
     println!("Successfully checked out tag: {}", tag_name);
 

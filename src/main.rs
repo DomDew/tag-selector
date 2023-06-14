@@ -1,5 +1,5 @@
 use dialoguer::{theme::ColorfulTheme, Select};
-use git2::Repository;
+use git2::{build::CheckoutBuilder, CheckoutNotificationType, Repository};
 
 fn main() {
     if let Err(e) = run() {
@@ -32,8 +32,10 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let tag = repo.revparse_single(tag_name)?;
 
-    let mut builder = git2::build::CheckoutBuilder::new();
-    let checkout_opts = builder.remove_untracked(true).remove_ignored(true);
+    let mut builder = CheckoutBuilder::new();
+    let checkout_opts = builder
+        .conflict_style_merge(true)
+        .notify_on(CheckoutNotificationType::CONFLICT);
 
     repo.checkout_tree(&tag, Some(checkout_opts))?;
 

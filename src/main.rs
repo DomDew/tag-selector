@@ -1,5 +1,6 @@
 use dialoguer::{theme::ColorfulTheme, Select};
 use git2::{build::CheckoutBuilder, Repository};
+use std::env;
 
 fn main() {
     if let Err(e) = run() {
@@ -10,7 +11,15 @@ fn main() {
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let repo = Repository::open(".")?;
 
-    let tag_names = repo.tag_names(Some("*"))?;
+    let args: Vec<String> = env::args().skip(1).collect();
+
+    let pattern = args
+        .iter()
+        .find(|arg| arg.starts_with("--pattern="))
+        .map(|arg| arg.trim_start_matches("--pattern="))
+        .unwrap_or("*");
+
+    let tag_names = repo.tag_names(Some(pattern))?;
 
     if tag_names.is_empty() {
         println!("No tags found in this repository");

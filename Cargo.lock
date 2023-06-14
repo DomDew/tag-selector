@@ -284,7 +284,7 @@ checksum = "24188a676b6ae68c3b2cb3a01be17fbf7240ce009799bb56d5b1409051e78fde"
 
 [[package]]
 name = "tag-selector"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "dialoguer",
  "git2",

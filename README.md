@@ -1,8 +1,16 @@
-# Tag-Selector
+# Introduction <!-- omit from toc -->
 
-This is a nifty little command line tool to lets you checkout a tag for a repository from a neat dropdown.
+Tag-selector is a nifty little command line tool to lets you checkout a tag for a git repository from a neat dropdown.
 
-## Installation
+- [Roadmap 🏗️](#roadmap-️)
+- [Installation 🧑‍🔧](#installation-)
+  - [Cargo](#cargo)
+
+## Roadmap 🏗️
+
+- Allow filters for tags
+
+## Installation 🧑‍🔧
 
 ### Cargo
 

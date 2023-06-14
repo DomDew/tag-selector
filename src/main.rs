@@ -1,5 +1,5 @@
 use dialoguer::{theme::ColorfulTheme, Select};
-use git2::{build::CheckoutBuilder, CheckoutNotificationType, Repository};
+use git2::{build::CheckoutBuilder, Repository};
 
 fn main() {
     if let Err(e) = run() {
